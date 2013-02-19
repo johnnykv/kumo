@@ -7,7 +7,6 @@ Basic usage for enabling logging to loggly.net:
 
 ``` python
 from bottle import route, run, template, install
-from bottle_loggly import LogglyPlugin
 from kumo.loggly import Loggly
 import bottle
 
