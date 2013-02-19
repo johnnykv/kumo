@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='kumo',
-    version='0.1',
+    version='0.2',
     packages=['kumo'],
     url='https://github.com/johnnykv/kumo',
     license='',

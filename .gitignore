@@ -42,3 +42,4 @@ doc/_build
 
 *.lock
 
+t.py
