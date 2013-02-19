@@ -1,10 +1,10 @@
 from distutils.core import setup
 
 setup(
-    name='Kumo',
+    name='kumo',
     version='0.1',
     packages=['kumo'],
-    url='',
+    url='https://github.com/johnnykv/kumo',
     license='',
     author='jkv',
     author_email='jkv@unixcluster.dk',
