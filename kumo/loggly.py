@@ -18,6 +18,7 @@
 from webob import Request
 from datetime import datetime
 import requests
+from requests import ConnectionError
 from Queue import Queue
 import threading
 import json
@@ -47,25 +48,32 @@ class Loggly(object):
         resp = req.get_response(self.app)
         end = datetime.now()
 
+        username = req.remote_user
+        #try to overwrite username with username from beaker
+        if 'beaker.session' in environ:
+            session = environ['beaker.session']
+            if 'username' in session:
+                username = session['username']
+
+
         d = {'remote_addr': req.remote_addr,
              'request_method': req.method,
              'full_url': req.url,
              'path': req.path,
              'query_string': req.query_string,
              'timed_microseconds': '{0}'.format((end - start).microseconds),
-             'username': req.remote_user,
+             'username': username,
              'user_agent': req.user_agent,
              'response_status': resp.status,
         }
-
         self.queue.put(d)
+
         return resp(environ, start_response)
 
     def worker(self):
         while True:
             d = self.queue.get()
-            #TODO: Handle errors...
-            requests.post('https://logs.loggly.com/inputs/{0}'.format(self.token), json.dumps(d))            try:
+            try:
                 r = requests.post('https://logs.loggly.com/inputs/{0}'.format(self.token), json.dumps(d))
                 if r.status_code != 200:
                     logger.debug('Error error occurred while transmitting data to loggly. ({0})'.format(r.text))
