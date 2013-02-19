@@ -61,11 +61,12 @@ class Loggly(object):
              'full_url': req.url,
              'path': req.path,
              'query_string': req.query_string,
-             'timed_microseconds': '{0}'.format((end - start).microseconds),
+             'timed_microseconds': (end - start).microseconds,
              'username': username,
              'user_agent': req.user_agent,
              'response_status': resp.status,
         }
+
         self.queue.put(d)
 
         return resp(environ, start_response)
