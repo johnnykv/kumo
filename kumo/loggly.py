@@ -55,19 +55,19 @@ class Loggly(object):
             if 'username' in session:
                 username = session['username']
 
+        log = {'remote_addr': req.remote_addr,
+               'username': username,
+               'user_agent': req.user_agent,
+               'request_method': req.method,
+               'full_url': req.url,
+               'path': req.path,
+               'query_string': req.query_string,
+               'response_status': resp.status,
+               'response_time': (end - start).microseconds,
+               'response_length': resp.content_length,
+               }
 
-        d = {'remote_addr': req.remote_addr,
-             'request_method': req.method,
-             'full_url': req.url,
-             'path': req.path,
-             'query_string': req.query_string,
-             'timed_microseconds': (end - start).microseconds,
-             'username': username,
-             'user_agent': req.user_agent,
-             'response_status': resp.status,
-        }
-
-        self.queue.put(d)
+        self.queue.put(log)
 
         return resp(environ, start_response)
 
