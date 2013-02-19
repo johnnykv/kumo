@@ -33,6 +33,11 @@ class Loggly(object):
         self.app = app
         self.token = token
         self.queue = Queue(maxsize=queue_size)
+
+        #less verbose logging from requests lib
+        requests_log = logging.getLogger("requests")
+        requests_log.setLevel(logging.WARNING)
+
         worker_thread = threading.Thread(target=self.worker)
         worker_thread.start()
 
