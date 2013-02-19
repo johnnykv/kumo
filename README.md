@@ -1,9 +1,16 @@
-kumo
+Description
 ====
 
-WSGI for cloud logging.
+WSGI middleware for shipping logs to cloud services. Currenly [Loggly](http://loggly.net) is supported, [loggr](http://loggr.com) will be supported in the near future.
 
-Basic usage for enabling logging to loggly.net:
+Installation
+============
+```
+pip install kumo
+```
+
+Usage for shipping request logs to Loggly
+=============================================
 
 ``` python
 from bottle import route, run, template, install
@@ -11,7 +18,8 @@ from kumo.loggly import Loggly
 import bottle
 
 app = bottle.app()
-myapp = Loggly(app, '37ae0051-c548-497e-9035-31ff2ef41857')
+loggly_token = '37ae0051-c548-497e-9035-31ff2ef41857'
+myapp = Loggly(app, loggly_token)
 
 @route('/hello/:name')
 def index(name='World'):
@@ -19,7 +27,7 @@ def index(name='World'):
 
 @route('/')
 def index():
-    return "DAVS"
+    return "Ya douchbag!"
 run(app=myapp,host='localhost', port=8080)
 
 ```
