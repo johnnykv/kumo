@@ -40,6 +40,7 @@ class Loggly(object):
         requests_log.setLevel(logging.WARNING)
 
         worker_thread = threading.Thread(target=self.worker)
+        worker_thread.daemon = True
         worker_thread.start()
 
     def __call__(self, environ, start_response):
@@ -73,12 +74,14 @@ class Loggly(object):
 
     def worker(self):
         while True:
-            d = self.queue.get()
+            log = self.queue.get()
             try:
-                r = requests.post('https://logs.loggly.com/inputs/{0}'.format(self.token), json.dumps(d))
+                r = requests.post('https://logs.loggly.com/inputs/{0}'.format(self.token), json.dumps(log))
                 if r.status_code != 200:
                     logger.debug('Error error occurred while transmitting data to loggly. ({0})'.format(r.text))
             except ConnectionError as ex:
                 logger.debug('Error creating connection to loggly. ({0})'.format(ex))
+            except KeyboardInterrupt:
+                break
 
 
