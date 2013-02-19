@@ -65,4 +65,11 @@ class Loggly(object):
         while True:
             d = self.queue.get()
             #TODO: Handle errors...
-            requests.post('https://logs.loggly.com/inputs/{0}'.format(self.token), json.dumps(d))
+            requests.post('https://logs.loggly.com/inputs/{0}'.format(self.token), json.dumps(d))            try:
+                r = requests.post('https://logs.loggly.com/inputs/{0}'.format(self.token), json.dumps(d))
+                if r.status_code != 200:
+                    logger.debug('Error error occurred while transmitting data to loggly. ({0})'.format(r.text))
+            except ConnectionError as ex:
+                logger.debug('Error creating connection to loggly. ({0})'.format(ex))
+
+
