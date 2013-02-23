@@ -31,3 +31,16 @@ def index():
 run(app=myapp,host='localhost', port=8080)
 
 ```
+
+## Logged informaiton
+The following information will be sent to loggly:
+* Username (Remote_user or beaker session if available)
+* Remote addr
+* Request_method
+* Full_url
+* Response status
+* Response length
+* Response time
+* User agent
+* Query string
+* Path
